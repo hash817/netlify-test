@@ -34,7 +34,7 @@ export default function Header() {
 
   return (
     <header className="main-header p-0 m-0">
-                        <Link href="/destinations/Singapore">Singapore</Link>
+                        <Link href="/destinations/singapore">Singapore</Link>
       <Link href="/destinations/dubai">Dubai</Link>
                           <Link href="/destinations/taiwan">Taiwan</Link>
                           <Link href="/destinations/malaysia">Malaysia</Link>
