@@ -12,7 +12,7 @@ function formatTitle(title) {
 
 export default async function CountryPage({ params }: { params: { country: string } }) {
   const { country } = await params
-
+  console.log(`${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/${encodeURIComponent(country)}`)
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/${encodeURIComponent(country)}`
   );
