@@ -1,3 +1,6 @@
+export const dynamic = 'force-dynamic';
+
+
 import { TourCardList } from "@/app/destinations/[country]/components/tour-card-list";
 
 
@@ -17,6 +20,7 @@ export default async function CountryPage({ params }: { params: { country: strin
     `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/${encodeURIComponent(country)}`
   );
   const data = await res.json();
+  console.log("DATA: ", data)
   return (
     <main className="mb-12!">
 
