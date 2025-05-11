@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 
 import { TourCardList } from "@/app/destinations/[country]/components/tour-card-list";
 

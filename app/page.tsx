@@ -7,20 +7,21 @@ import DayTourCard from '@/app/components/day-tour';
 import TopDestinations from '@/app/components/top-destinations';
 import "./globals.css";
 import Link from 'next/link';
+import { formatTourPackages } from './api/destination/[country]/route';
 
 async function getPackageFromCountry(country: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/${country}?shown_on_home_page=1`
+    `${process.env.NEXT_PUBLIC_API_BASE_URL}/jsonapi/node/tour_package?filter[country][path]=field_country_of_package&filter[country][value]=${country}&filter[home][path]=field_shown_on_home_page&filter[home][value]=1&include=field_first_image,field_itinery_pdf&sort=field_tour_duration`
   );
   return res.json()
 }
 
-async function getPackage(package_type: string) {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/all?package_type=${package_type}&shown_on_home_page=1`
-  );
-  return res.json()
-}
+// async function getPackage(package_type: string) {
+//   const res = await fetch(
+//     `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/destination/all?package_type=${package_type}&shown_on_home_page=1`
+//   );
+//   return res.json()
+// }
 
 export default async function Home() {
   const testimonials = [
@@ -52,11 +53,15 @@ export default async function Home() {
   // const dayData = getPackage("day_tour")
 
   const [singapore, vietnam, taiwan, thailand] = await Promise.all([singaporeData, vietnamData, taiwanData, thailandData])
-
+  const formattedSingapore = formatTourPackages(singapore, "singapore")
+  const formattedVietnam = formatTourPackages(vietnam, "vietnam")
+  const formattedTaiwan = formatTourPackages(taiwan, "taiwan")
+  const formattedThailand = formatTourPackages(thailand, "thailand")
+  console.log(formattedSingapore)
   return (
     <>
       <HeroBanner />
-      {singapore.length != 0 && (
+      {formattedSingapore.length != 0 && (
         <section id="featured-tours" className="featured-tours py-1 px-10">
           <div className="container">
             <div className="section-header">
@@ -67,7 +72,7 @@ export default async function Home() {
             </div>
 
             <div className="tour-grid">
-              {singapore.slice(-3).map(tour => (
+              {formattedSingapore.slice(-3).map(tour => (
                 <TourCard key={tour.id} {...tour} />
               ))}
             </div>
@@ -96,7 +101,7 @@ export default async function Home() {
           </div>
         </div>
       </section> */}
-      {vietnam.length != 0 && (
+      {formattedVietnam.length != 0 && (
         <section className="section-footer bg-white pb-6 px-3 sm:px-10">
           <div className="container ">
             <div className="section-header">
@@ -104,7 +109,7 @@ export default async function Home() {
             </div>
 
             <div className="tour-grid">
-              {vietnam.slice(-3).map(tour => (
+              {formattedVietnam.slice(-3).map(tour => (
                 <TourCard key={tour.id} {...tour} />
               ))}
             </div>
@@ -115,7 +120,7 @@ export default async function Home() {
           </div>
         </section>
       )}
-      {taiwan.length != 0 && (
+      {formattedTaiwan.length != 0 && (
         <section className="section-footer bg-white pb-6 px-3 sm:px-10">
           <div className="container ">
             <div className="section-header">
@@ -123,7 +128,7 @@ export default async function Home() {
             </div>
 
             <div className="tour-grid">
-              {taiwan.slice(-3).map(tour => (
+              {formattedTaiwan.slice(-3).map(tour => (
                 <TourCard key={tour.id} {...tour} />
               ))}
             </div>
@@ -134,7 +139,7 @@ export default async function Home() {
           </div>
         </section>
       )}
-      {thailand.length != 0 && (
+      {formattedThailand.length != 0 && (
         <section className="section-footer bg-white pb-6 px-3 sm:px-10">
           <div className="container ">
             <div className="section-header">
@@ -142,7 +147,7 @@ export default async function Home() {
             </div>
 
             <div className="tour-grid">
-              {thailand.slice(-3).map(tour => (
+              {formattedThailand.slice(-3).map(tour => (
                 <TourCard key={tour.id} {...tour} />
               ))}
             </div>

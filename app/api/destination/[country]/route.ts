@@ -2,49 +2,50 @@ import { NextRequest, NextResponse } from 'next/server';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_BASE_URL; 
 
+export function formatTourPackages(json, country) {
+  const fileMap = {};
+  // console.log(json)
+  // Index all file entities from `included` array
+  if (json.included) {
+    json.included.forEach((item) => {
+      if (item.type === 'file--file') {
+        fileMap[item.id] = item.attributes.uri?.url;
+      }
+    });
+  }
+  return json.data.map((item) => {
+    const { id, attributes, relationships } = item;
+    const title = attributes.title;
+    const imageId = relationships.field_first_image?.data?.id;
+    const pdfId = relationships.field_itinery_pdf?.data?.id;
+    console.log(imageId)
+    return {
+      id: parseInt(attributes.drupal_internal__nid),
+      title,
+      description: attributes.field_description,
+      price: parseFloat(attributes.field_price),
+      image: imageId && fileMap[imageId] ? `${baseUrl}${fileMap[imageId]}` : '/images/kent.jpg',
+      // link: `/${country.toLowerCase()}/${title.replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`,
+      link: `/destinations/${country.toLowerCase()}/${title}/${parseInt(attributes.drupal_internal__nid)}`,
+      destinations: attributes.field_tour_destinations,
+      highlights: attributes.field_shown_on_home_page ? attributes.field_tour_highlights : [],
+      dayTour: attributes.field_package_type === 'day_tour' || false,
+      timeLimited: attributes.field_package_type?.includes('time_limited') || false,
+      expiryDate: attributes.field_package_type?.includes('time_limited') ? attributes.field_expiry_time : '',
+      originalPrice: attributes.field_package_type?.includes('time_limited') ? attributes.field_original_price : '',
+      multiDay: attributes.field_package_type?.includes('multi_day_tour') || false,
+      transportation: attributes.field_package_type?.includes('transportation') || false,
+      duration: attributes.field_tour_duration || '',
+      endValidityDate: attributes.field_end_of_validity || '',
+      currency: attributes.field_price_currency || '',
+    };
+  });
+}
+
 export async function GET(
   request: NextRequest,
   { params }: { params: { country: string } }
 ) {
-  function formatTourPackages(json, country) {
-    const fileMap = {};
-    // console.log(json)
-    // Index all file entities from `included` array
-    if (json.included) {
-      json.included.forEach((item) => {
-        if (item.type === 'file--file') {
-          fileMap[item.id] = item.attributes.uri?.url;
-        }
-      });
-    }
-    return json.data.map((item) => {
-      const { id, attributes, relationships } = item;
-      const title = attributes.title;
-      const imageId = relationships.field_first_image?.data?.id;
-      const pdfId = relationships.field_itinery_pdf?.data?.id;
-  
-      return {
-        id: parseInt(attributes.drupal_internal__nid),
-        title,
-        description: attributes.field_description,
-        price: parseFloat(attributes.field_price),
-        image: imageId && fileMap[imageId] ? `${baseUrl}${fileMap[imageId]}` : '/images/kent.jpg',
-        // link: `/${country.toLowerCase()}/${title.replace(/\s+/g, '-').replace(/[^\w-]/g, '')}`,
-        link: `/destinations/${country.toLowerCase()}/${title}/${parseInt(attributes.drupal_internal__nid)}`,
-        destinations: attributes.field_tour_destinations,
-        highlights: attributes.field_shown_on_home_page ? attributes.field_tour_highlights : [],
-        dayTour: attributes.field_package_type === 'day_tour' || false,
-        timeLimited: attributes.field_package_type?.includes('time_limited') || false,
-        expiryDate: attributes.field_package_type?.includes('time_limited') ? attributes.field_expiry_time : '',
-        originalPrice: attributes.field_package_type?.includes('time_limited') ? attributes.field_original_price : '',
-        multiDay: attributes.field_package_type?.includes('multi_day_tour') || false,
-        transportation: attributes.field_package_type?.includes('transportation') || false,
-        duration: attributes.field_tour_duration || '',
-        endValidityDate: attributes.field_end_of_validity || '',
-        currency: attributes.field_price_currency || '',
-      };
-    });
-  }
   console.log("SERVERLESS FUNCTION GETTING INVOKED")
   console.log(request)
   const searchParams = request.nextUrl.searchParams
