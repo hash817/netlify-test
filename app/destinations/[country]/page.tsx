@@ -1,4 +1,6 @@
-import { TourCardList } from "@/app/(tour pages)/destinations/[country]/components/tour-card-list";
+export const dynamic = 'force-dynamic';
+
+import { TourCardList } from "@/app/destinations/[country]/components/tour-card-list";
 
 
 function formatTitle(title) {

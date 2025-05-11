@@ -12,7 +12,7 @@
 'use client';
 
 import { useState, useEffect, useContext } from 'react';
-import { FilterContext } from '../(tour pages)/destinations/[country]/filter-context';
+import { FilterContext } from '../destinations/[country]/filter-context';
 import { usePathname, useSearchParams } from 'next/navigation';
 
 export function FilterTabs({className}: {className: string}) {
