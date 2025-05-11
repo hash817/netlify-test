@@ -11,14 +11,14 @@ import Link from 'next/link';
 
 async function getPackageFromCountry(country: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/tour_packages/${country}?shown_on_home_page=1`
+    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/${country}?shown_on_home_page=1`
   );
   return res.json()
 }
 
 async function getPackage(package_type: string) {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/tour_packages/all?package_type=${package_type}&shown_on_home_page=1`
+    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/all?package_type=${package_type}&shown_on_home_page=1`
   );
   return res.json()
 }

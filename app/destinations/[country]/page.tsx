@@ -1,5 +1,3 @@
-export const dynamic = 'force-dynamic';
-
 import { TourCardList } from "@/app/destinations/[country]/components/tour-card-list";
 
 
@@ -16,7 +14,7 @@ export default async function CountryPage({ params }: { params: { country: strin
   const { country } = await params
 
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/tour_packages/${encodeURIComponent(country)}`
+    `${process.env.NEXT_PUBLIC_ORIGIN_URL}/api/destination/${encodeURIComponent(country)}`
   );
   const data = await res.json();
   return (
